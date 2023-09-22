@@ -1,12 +1,14 @@
 import CityModel from "@/models/CityModel";
 import styles from "../styles/CityItem.module.css";
+import Link from "next/link";
+import { DateNotFound } from "@/lib/exceptions";
 
 interface CityItemProps {
   city: CityModel;
 }
 
 function CityItem({ city }: CityItemProps) {
-  const { cityName, emoji, date } = city;
+  const { cityName, emoji, date, position } = city;
 
   const flagEmojiToPNG = (flag: string): JSX.Element => {
     const countryCode = Array.from(flag)
@@ -28,16 +30,21 @@ function CityItem({ city }: CityItemProps) {
         year: "numeric",
       }).format(new Date(date));
     } else {
-      return "Sorry, No date found.";
+      throw new DateNotFound();
     }
   };
 
   return (
-    <li className={styles.cityItem}>
-      <span className={styles.emoji}>{flagEmojiToPNG(emoji)}</span>
-      <h3 className={styles.name}>{cityName}</h3>
-      <time className={styles.date}>({formatDate(date)})</time>
-      <button className={styles.deleteBtn}>&times;</button>
+    <li>
+      <Link
+        href={`/app/cities/${cityName}?lan=${position.lat}&lng=${position.lng}`}
+        className={styles.cityItem}
+      >
+        <span className={styles.emoji}>{flagEmojiToPNG(emoji)}</span>
+        <h3 className={styles.name}>{cityName}</h3>
+        <time className={styles.date}>({formatDate(date)})</time>
+        <button className={styles.deleteBtn}>&times;</button>
+      </Link>
     </li>
   );
 }

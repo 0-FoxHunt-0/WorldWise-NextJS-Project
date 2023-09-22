@@ -1,5 +1,7 @@
+import { redirect } from "next/navigation";
+
 function App() {
-  return <div>App</div>;
+  redirect("/app/cities");
 }
 
 export default App;
