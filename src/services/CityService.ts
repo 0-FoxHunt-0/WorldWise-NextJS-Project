@@ -14,6 +14,16 @@ class CityService {
     const cities: CityModel[] = data.record.cities;
     return cities;
   }
+
+  public flagEmojiToPNG(flag: string): string {
+    const countryCode = Array.from(flag)
+      .map((char) =>
+        String.fromCodePoint(char.codePointAt(0)! - 127397).toLowerCase()
+      )
+      .join("");
+
+    return `https://flagcdn.com/24x18/${countryCode}.png`;
+  }
 }
 
 const cityService = new CityService();

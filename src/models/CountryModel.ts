@@ -1,4 +1,4 @@
-interface CountryModel {
+class CountryModel {
   country: string;
   emoji: string;
 }

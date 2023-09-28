@@ -1,5 +1,9 @@
-import React, { useState } from "react";
+"use client";
+
+import { useState } from "react";
 import styles from "../styles/Form.module.css";
+import Button from "./Button";
+import ButtonBack from "./ButtonBack";
 
 // "https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=0&longitude=0"
 
@@ -11,7 +15,11 @@ export function convertToEmoji(countryCode: string) {
   return String.fromCodePoint(...codePoints);
 }
 
-function Form() {
+interface CityFormProps {
+  backCallback: (e: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
+function CityForm({ backCallback }: CityFormProps) {
   const [cityName, setCityName] = useState<string>("");
   const [country, setCountry] = useState<string>("");
   const [date, setDate] = useState<string>(new Date().toLocaleDateString());
@@ -48,11 +56,13 @@ function Form() {
       </div>
 
       <div className={styles.buttons}>
-        <button>Add</button>
-        <button>&larr; Back</button>
+        <Button type="primary" onClickHandler={() => {}}>
+          Add
+        </Button>
+        <ButtonBack onClickHandler={backCallback} />
       </div>
     </form>
   );
 }
 
-export default Form;
+export default CityForm;

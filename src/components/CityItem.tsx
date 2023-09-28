@@ -1,26 +1,19 @@
+"use client";
+
 import CityModel from "@/models/CityModel";
 import styles from "../styles/CityItem.module.css";
 import Link from "next/link";
-import { DateNotFound } from "@/lib/exceptions";
+import { DateNotFoundToast } from "@/lib/exceptions";
+import cityService from "@/services/CityService";
+import { useCitiesContext } from "@/contexts/CitiesContext";
 
 interface CityItemProps {
   city: CityModel;
 }
 
 function CityItem({ city }: CityItemProps) {
-  const { cityName, emoji, date, position } = city;
-
-  const flagEmojiToPNG = (flag: string): JSX.Element => {
-    const countryCode = Array.from(flag)
-      .map((char) =>
-        String.fromCodePoint(char.codePointAt(0)! - 127397).toLowerCase()
-      )
-      .join("");
-
-    return (
-      <img src={`https://flagcdn.com/24x18/${countryCode}.png`} alt="flag" />
-    );
-  };
+  const { cityName, emoji, date, position, id } = city;
+  const { selectedCity, setSelectedCity } = useCitiesContext();
 
   const formatDate = (date: string) => {
     if (date) {
@@ -30,17 +23,22 @@ function CityItem({ city }: CityItemProps) {
         year: "numeric",
       }).format(new Date(date));
     } else {
-      throw new DateNotFound();
+      DateNotFoundToast();
     }
   };
 
   return (
     <li>
       <Link
-        href={`/app/cities/${cityName}?lan=${position.lat}&lng=${position.lng}`}
-        className={styles.cityItem}
+        href={`/app/cities/${id}?lan=${position.lat}&lng=${position.lng}`}
+        className={`${styles.cityItem} ${
+          selectedCity?.id === id ? styles["cityItem--active"] : ""
+        }`}
+        onClick={() => setSelectedCity(city)}
       >
-        <span className={styles.emoji}>{flagEmojiToPNG(emoji)}</span>
+        <span className={styles.emoji}>
+          <img src={cityService.flagEmojiToPNG(emoji)} alt="flag" />
+        </span>
         <h3 className={styles.name}>{cityName}</h3>
         <time className={styles.date}>({formatDate(date)})</time>
         <button className={styles.deleteBtn}>&times;</button>

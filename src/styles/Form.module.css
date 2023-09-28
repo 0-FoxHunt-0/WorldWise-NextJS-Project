@@ -6,6 +6,7 @@
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  overflow-y: auto;
 }
 
 .row {
@@ -36,9 +37,4 @@
   background-color: var(--color-light--1);
   border: 1px solid var(--color-light--1);
   color: var(--color-dark--0);
-}
-
-:global(.react-datepicker) {
-  font-family: inherit;
-  font-size: 1.2rem;
 }

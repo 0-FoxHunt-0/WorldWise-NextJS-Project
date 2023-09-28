@@ -1,17 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import { useCitiesContext } from "@/contexts/CitiesContext";
 import styles from "../styles/CityList.module.css";
-import CityModel from "@/models/CityModel";
 import CityItem from "./CityItem";
 import Message from "./Message";
 
-interface CityListProps {
-  cities: CityModel[];
-}
-
-function CityList(props: CityListProps) {
-  const [cities, setCities] = useState<CityModel[]>(props.cities);
+function CityList() {
+  const { cities } = useCitiesContext();
 
   if (!cities.length)
     return (

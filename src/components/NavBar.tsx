@@ -1,10 +1,13 @@
 "use client";
 
+import { DateNotFoundToast } from "@/lib/exceptions";
 import styles from "../styles/PageNav.module.css";
 import Logo from "./Logo";
 import NavLink from "./NavLink";
 
 function NavBar() {
+  DateNotFoundToast()
+
   return (
     <nav className={styles.nav}>
       <Logo />

@@ -1,4 +1,4 @@
-interface CityModel {
+class CityModel {
   cityName: string;
   country: string;
   emoji: string;

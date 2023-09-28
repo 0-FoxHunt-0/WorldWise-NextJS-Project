@@ -1,6 +1,6 @@
+import NavBar from "@/components/NavBar";
 import Link from "next/link";
 import styles from "../styles/Homepage.module.css";
-import NavBar from "@/components/NavBar";
 
 export default function Home() {
   return (
@@ -17,7 +17,7 @@ export default function Home() {
           of. Never forget your wonderful experiences, and show your friends how
           you have wandered the world.
         </h2>
-        <Link href={"/"} className="cta">
+        <Link href={"/app"} className="cta">
           Start tracking now
         </Link>
       </section>

@@ -1,6 +1,11 @@
-import { DateNotFound, ResourceNotFound } from "@/lib/exceptions";
+"use client";
+
+import { useCitiesContext } from "@/contexts/CitiesContext";
+import { DateNotFoundToast, ResourceNotFoundToast } from "@/lib/exceptions";
 import CityModel from "@/models/CityModel";
+import cityService from "@/services/CityService";
 import styles from "../styles/City.module.css";
+import ButtonBack from "./ButtonBack";
 
 const formatDate = (date: string) => {
   if (date) {
@@ -11,22 +16,21 @@ const formatDate = (date: string) => {
       weekday: "long",
     }).format(new Date(date));
   } else {
-    throw new DateNotFound();
+    DateNotFoundToast();
   }
 };
 
 interface CityProps {
-  cities: CityModel[];
-  params: { slug: string };
+  params: { id: string };
   searchParams: { lan: string; lng: string };
+  backCallback: () => void;
 }
 
-function City({ cities, params, searchParams }: CityProps): JSX.Element {
+function City({ params, searchParams, backCallback }: CityProps): JSX.Element {
+  const { cities } = useCitiesContext();
+
   const currentCity: CityModel | undefined = cities.find(
-    (city) =>
-      city.cityName === params.slug &&
-      city.position.lat === +searchParams.lan &&
-      city.position.lng === +searchParams.lng
+    (city) => city.id === +params.id
   );
 
   if (currentCity) {
@@ -36,7 +40,10 @@ function City({ cities, params, searchParams }: CityProps): JSX.Element {
         <div className={styles.row}>
           <h6>City name</h6>
           <h3>
-            <span>{emoji}</span> {cityName}
+            <span>
+              <img src={cityService.flagEmojiToPNG(emoji)} alt="flag" />
+            </span>{" "}
+            {cityName}
           </h3>
         </div>
 
@@ -63,11 +70,13 @@ function City({ cities, params, searchParams }: CityProps): JSX.Element {
           </a>
         </div>
 
-        <div>{/* <ButtonBack /> */}</div>
+        <div>
+          <ButtonBack onClickHandler={backCallback} />
+        </div>
       </div>
     );
   } else {
-    throw new ResourceNotFound("City not found.");
+    ResourceNotFoundToast("City not found.");
   }
 }
 
