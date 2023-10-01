@@ -8,7 +8,7 @@ class CityModel {
     lat: number;
     lng: number;
   };
-  id: number;
+  id: string;
 }
 
 export default CityModel;

@@ -17,7 +17,7 @@ export default function Home() {
           of. Never forget your wonderful experiences, and show your friends how
           you have wandered the world.
         </h2>
-        <Link href={"/app"} className="cta">
+        <Link href={"/app/cities"} className="cta">
           Start tracking now
         </Link>
       </section>

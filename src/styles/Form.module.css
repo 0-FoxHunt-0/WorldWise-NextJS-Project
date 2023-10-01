@@ -16,6 +16,12 @@
   position: relative;
 }
 
+.row input,
+.row textarea {
+  background-color: var(--color-light--3);
+  color: black;
+}
+
 .buttons {
   display: flex;
   justify-content: space-between;
@@ -24,7 +30,7 @@
 .flag {
   position: absolute;
   right: 1rem;
-  top: 2.7rem;
+  top: 4rem;
   font-size: 2.8rem;
 }
 

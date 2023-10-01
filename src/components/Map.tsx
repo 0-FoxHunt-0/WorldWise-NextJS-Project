@@ -4,37 +4,89 @@ import { useGeolocation } from "@/hooks/useGeolocation";
 import styles from "../styles/Map.module.css";
 
 import { useCitiesContext } from "@/contexts/CitiesContext";
+import { useUrlPosition } from "@/hooks/useUrlPosition";
 import PositionModel from "@/models/PositionModel";
-import { ReadonlyURLSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
-import { LocationNotFoundToast } from "@/lib/exceptions";
+import "leaflet-defaulticon-compatibility";
+import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
+import "leaflet/dist/leaflet.css";
+import { isEqual } from "lodash";
+import { useRouter } from "next/navigation";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import {
+  Circle,
+  FeatureGroup,
+  MapContainer,
+  Marker,
+  Popup,
+  TileLayer,
+  useMap,
+  useMapEvents,
+} from "react-leaflet";
+import Button from "./Button";
+import { Position } from "postcss";
 
-interface MapProps {
-  cityId: string;
-  searchParams: ReadonlyURLSearchParams;
-}
-
-function Map({ cityId, searchParams }: MapProps) {
+function Map() {
   const { cities } = useCitiesContext();
-  const { position, getPosition } = useGeolocation();
-  const lat: number = +searchParams.get("lan");
-  const lng: number = +searchParams.get("lng");
+  const { position, getPosition, isLoadingPosition } = useGeolocation();
+  const userPosition = useRef<PositionModel>(position);
+  const { lat, lng } = useUrlPosition();
   const [center, setCenter] = useState<PositionModel>({ lat: 40, lng: 0 });
+  const router = useRouter();
 
   useEffect(() => {
     if (lat && lng) setCenter({ lat, lng });
     else {
-      getPosition().then((value) => setCenter(value));
+      getPosition().then((value) => {
+        if (value !== null) {
+          userPosition.current.lat = value.lat;
+          userPosition.current.lng = value.lng;
+        }
+      });
     }
   }, [lat, lng]);
-  console.log(position, center);
+
+  function handleSetCenter(position: PositionModel) {
+    setCenter(position);
+  }
+
+  // Calculate the distance between two points (Haversine formula)
+  function calculateDistance(
+    lat1: number,
+    lon1: number,
+    lat2: number,
+    lon2: number
+  ): number {
+    const R = 6371; // Radius of the Earth in kilometers
+    const dLat = (lat2 - lat1) * (Math.PI / 180);
+    const dLon = (lon2 - lon1) * (Math.PI / 180);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * (Math.PI / 180)) *
+        Math.cos(lat2 * (Math.PI / 180)) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c;
+
+    return distance;
+  }
+
+  // Define the radius threshold (in kilometers) for button visibility
+  const radiusThreshold = 0.75; // Adjust this value as needed
+
+  // Calculate the distance between the current center and the user's position
+  const distanceToUser = calculateDistance(
+    center.lat,
+    center.lng,
+    userPosition.current.lat,
+    userPosition.current.lng
+  );
 
   return (
     <div className={styles.mapContainer}>
       <MapContainer
         center={[center.lat, center.lng]}
-        zoom={6}
+        zoom={13}
         scrollWheelZoom={true}
         className={styles.map}
       >
@@ -50,15 +102,111 @@ function Map({ cityId, searchParams }: MapProps) {
             <Popup>{`${city.cityName}, ${city.country}`}</Popup>
           </Marker>
         ))}
-        <ChangeCenter position={center} />
+        {/* <ChangeCenter position={center} /> */}
+        <FeatureGroup>
+          <Popup>Your approximate current location</Popup>
+          {userPosition.current.lat && userPosition.current.lng && (
+            <>
+              <Circle
+                center={[userPosition.current.lat, userPosition.current.lng]}
+                radius={600}
+              />
+              <Marker
+                position={[userPosition.current.lat, userPosition.current.lng]}
+              ></Marker>
+            </>
+          )}
+        </FeatureGroup>
+        <DetectClick />
+        <TrackMapCenter center={center} handleSetCenter={handleSetCenter} />
       </MapContainer>
+      {distanceToUser > radiusThreshold && (
+        <Button
+          type="position"
+          onClickHandler={() => {
+            getPosition().then((value) => {
+              setCenter({ lat: value.lat, lng: value.lng });
+            });
+            router.push("/app/cities");
+          }}
+        >
+          {isLoadingPosition ? "Loading..." : "Go To Self"}
+        </Button>
+      )}
     </div>
   );
 }
 
 function ChangeCenter({ position }: { position: PositionModel }): null {
   const map = useMap();
-  map.setView([position.lat, position.lng]);
+  map.flyTo([position.lat, position.lng], 13);
+  return null;
+}
+
+function DetectClick(): null {
+  const router = useRouter();
+  const map = useMap();
+
+  useMapEvents({
+    click: (e) => {
+      map.flyTo([e.latlng.lat, e.latlng.lng]);
+      router.push(`/app/form?lat=${e.latlng.lat}&lng=${e.latlng.lng}`);
+    },
+  });
+
+  return null;
+}
+
+function TrackMapCenter({
+  center,
+  handleSetCenter,
+}: {
+  center: PositionModel;
+  handleSetCenter: (position: PositionModel) => void;
+}): null {
+  const map = useMap();
+
+  useEffect(() => {
+    map.flyTo([center.lat, center.lng], map.getZoom());
+  }, [center, map]);
+
+  useEffect(() => {
+    function handleMapMoveEnd() {
+      const mapCenter = map.getCenter();
+      const newCenter = {
+        lat: +mapCenter.lat.toFixed(4),
+        lng: +mapCenter.lng.toFixed(4),
+      };
+
+      if (newCenter.lat !== center.lat || newCenter.lng !== center.lng) {
+        handleSetCenter(newCenter);
+      }
+    }
+
+    map.on("moveend", handleMapMoveEnd);
+
+    return () => {
+      map.off("moveend", handleMapMoveEnd);
+    };
+  }, [handleSetCenter, map, center]);
+
+  // useEffect(() => {
+  //   function handleMapMoveEnd() {
+  //     const mapCenter = map.getCenter();
+  //     handleSetCenter({ lat: +mapCenter.lat.toFixed(4), lng: +mapCenter.lng.toFixed(4) });
+  //   }
+
+  //   map.on("moveend", handleMapMoveEnd);
+
+  //   return () => {
+  //     map.off("moveend", handleMapMoveEnd);
+  //   };
+  // }, [handleSetCenter, map]);
+
+  // if (center !== map.getCenter()) {
+  //   map.flyTo(center);
+  // }
+
   return null;
 }
 

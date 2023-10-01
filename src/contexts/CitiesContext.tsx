@@ -23,6 +23,7 @@ interface ContextProps {
   setCities: Dispatch<SetStateAction<CityModel[]>>;
   selectedCity: CityModel | undefined;
   setSelectedCity: Dispatch<SetStateAction<CityModel | undefined>>;
+  createCity: (city: CityModel) => void;
 }
 
 const CitiesContext = createContext<ContextProps>({
@@ -30,6 +31,7 @@ const CitiesContext = createContext<ContextProps>({
   setCities: (): CityModel[] => [],
   selectedCity: undefined,
   setSelectedCity: (): CityModel | undefined => undefined,
+  createCity: (): CityModel | undefined => undefined,
 });
 
 export function CitiesProvider({ children }: CitiesProviderProps): JSX.Element {
@@ -49,9 +51,20 @@ export function CitiesProvider({ children }: CitiesProviderProps): JSX.Element {
     getCities();
   }, []);
 
+  async function createCity(city: CityModel) {
+    try {
+      const data = cities;
+      data.push(city);
+      await cityService.updateCities(data);
+    } catch (error) {
+      console.error(error);
+      ResourceNotFoundToast();
+    }
+  }
+
   return (
     <CitiesContext.Provider
-      value={{ cities, setCities, selectedCity, setSelectedCity }}
+      value={{ cities, setCities, selectedCity, setSelectedCity, createCity }}
     >
       {children}
     </CitiesContext.Provider>

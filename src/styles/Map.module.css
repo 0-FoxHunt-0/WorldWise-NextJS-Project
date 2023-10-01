@@ -1,9 +1,7 @@
-@import "https://unpkg.com/leaflet@1.7.1/dist/leaflet.css";
-@import "https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap";
-
 .mapContainer {
   flex: 1;
-  height: 100%;
+  /* height: fit-content; */
+  width: 100%;
   background-color: var(--color-dark--2);
   position: relative;
 }
@@ -11,4 +9,6 @@
 .map {
   height: 100%;
 }
+
+
 

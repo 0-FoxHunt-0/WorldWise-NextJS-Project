@@ -9,7 +9,8 @@
   cursor: pointer;
 }
 
-.primary {
+.primary,
+.primary:hover {
   font-weight: 700;
   background-color: var(--color-brand--2);
   color: var(--color-dark--1);
@@ -21,7 +22,8 @@
   border: 1px solid currentColor;
 }
 
-.position {
+.position,
+.position:hover {
   font-weight: 700;
   position: absolute;
   z-index: 1000;

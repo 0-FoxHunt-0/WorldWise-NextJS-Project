@@ -11,8 +11,26 @@ class CityService {
         },
       }
     );
-    const cities: CityModel[] = data.record.cities;
+    const cities: CityModel[] = data.record;
     return cities;
+  }
+
+  public async updateCities(cities: CityModel[]): Promise<void> {
+    try {
+      await axios.put(
+        `https://api.jsonbin.io/v3/b/${process.env.BIN_ID}`,
+        JSON.stringify(cities),
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "X-Master-Key": process.env.API_KEY,
+            "X-Access-Key": process.env.ACCESS_KEY,
+          },
+        }
+      );
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   public flagEmojiToPNG(flag: string): string {

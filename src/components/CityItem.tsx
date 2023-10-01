@@ -30,7 +30,7 @@ function CityItem({ city }: CityItemProps) {
   return (
     <li>
       <Link
-        href={`/app/cities/${id}?lan=${position.lat}&lng=${position.lng}`}
+        href={`/app/cities/${id}?lat=${position.lat}&lng=${position.lng}`}
         className={`${styles.cityItem} ${
           selectedCity?.id === id ? styles["cityItem--active"] : ""
         }`}
@@ -41,7 +41,9 @@ function CityItem({ city }: CityItemProps) {
         </span>
         <h3 className={styles.name}>{cityName}</h3>
         <time className={styles.date}>({formatDate(date)})</time>
-        <button className={styles.deleteBtn}>&times;</button>
+        <button className={styles.deleteBtn}>
+          <span>&times;</span>
+        </button>
       </Link>
     </li>
   );

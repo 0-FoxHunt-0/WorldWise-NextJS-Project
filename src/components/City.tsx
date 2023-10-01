@@ -30,7 +30,7 @@ function City({ params, searchParams, backCallback }: CityProps): JSX.Element {
   const { cities } = useCitiesContext();
 
   const currentCity: CityModel | undefined = cities.find(
-    (city) => city.id === +params.id
+    (city) => city.id === params.id
   );
 
   if (currentCity) {
