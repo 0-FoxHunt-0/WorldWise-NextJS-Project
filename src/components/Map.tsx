@@ -2,16 +2,14 @@
 
 import { useGeolocation } from "@/hooks/useGeolocation";
 import styles from "../styles/Map.module.css";
-
 import { useCitiesContext } from "@/contexts/CitiesContext";
 import { useUrlPosition } from "@/hooks/useUrlPosition";
 import PositionModel from "@/models/PositionModel";
 import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
 import "leaflet/dist/leaflet.css";
-import { isEqual } from "lodash";
 import { useRouter } from "next/navigation";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Circle,
   FeatureGroup,
@@ -23,9 +21,14 @@ import {
   useMapEvents,
 } from "react-leaflet";
 import Button from "./Button";
-import { Position } from "postcss";
+import User from "./User";
 
-function Map() {
+interface MapProps {
+  user: any;
+  displayName: string;
+}
+
+function Map({ displayName, user }: MapProps) {
   const { cities } = useCitiesContext();
   const { position, getPosition, isLoadingPosition } = useGeolocation();
   const userPosition = useRef<PositionModel>(position);
@@ -94,7 +97,7 @@ function Map() {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
         />
-        {cities.map((city) => (
+        {cities?.map((city) => (
           <Marker
             key={city.id}
             position={[city.position.lat, city.position.lng]}
@@ -102,7 +105,6 @@ function Map() {
             <Popup>{`${city.cityName}, ${city.country}`}</Popup>
           </Marker>
         ))}
-        {/* <ChangeCenter position={center} /> */}
         <FeatureGroup>
           <Popup>Your approximate current location</Popup>
           {userPosition.current.lat && userPosition.current.lng && (
@@ -120,6 +122,7 @@ function Map() {
         <DetectClick />
         <TrackMapCenter center={center} handleSetCenter={handleSetCenter} />
       </MapContainer>
+      <User displayName={displayName} user={user} />
       {distanceToUser > radiusThreshold && (
         <Button
           type="position"
@@ -135,12 +138,6 @@ function Map() {
       )}
     </div>
   );
-}
-
-function ChangeCenter({ position }: { position: PositionModel }): null {
-  const map = useMap();
-  map.flyTo([position.lat, position.lng], 13);
-  return null;
 }
 
 function DetectClick(): null {
@@ -189,23 +186,6 @@ function TrackMapCenter({
       map.off("moveend", handleMapMoveEnd);
     };
   }, [handleSetCenter, map, center]);
-
-  // useEffect(() => {
-  //   function handleMapMoveEnd() {
-  //     const mapCenter = map.getCenter();
-  //     handleSetCenter({ lat: +mapCenter.lat.toFixed(4), lng: +mapCenter.lng.toFixed(4) });
-  //   }
-
-  //   map.on("moveend", handleMapMoveEnd);
-
-  //   return () => {
-  //     map.off("moveend", handleMapMoveEnd);
-  //   };
-  // }, [handleSetCenter, map]);
-
-  // if (center !== map.getCenter()) {
-  //   map.flyTo(center);
-  // }
 
   return null;
 }

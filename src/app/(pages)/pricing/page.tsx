@@ -1,7 +1,5 @@
-import React from "react";
-import styles from "../../../styles/Product.module.css";
-import Image from "next/image";
 import NavBar from "@/components/NavBar";
+import styles from "../../../styles/Product.module.css";
 
 function Pricing() {
   return (

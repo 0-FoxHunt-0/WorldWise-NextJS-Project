@@ -1,6 +1,5 @@
 "use client";
 
-import Loading from "@/app/(pages)/app/loading";
 import { OutOfContextToast, ResourceNotFoundToast } from "@/lib/exceptions";
 import CityModel from "@/models/CityModel";
 import cityService from "@/services/CityService";
@@ -16,6 +15,7 @@ import {
 
 interface CitiesProviderProps {
   children: ReactNode;
+  session: any;
 }
 
 interface ContextProps {
@@ -24,6 +24,9 @@ interface ContextProps {
   selectedCity: CityModel | undefined;
   setSelectedCity: Dispatch<SetStateAction<CityModel | undefined>>;
   createCity: (city: CityModel) => void;
+  deleteCity: (id: string) => void;
+  isLoading: boolean;
+  setIsLoading: Dispatch<SetStateAction<boolean>>;
 }
 
 const CitiesContext = createContext<ContextProps>({
@@ -32,39 +35,73 @@ const CitiesContext = createContext<ContextProps>({
   selectedCity: undefined,
   setSelectedCity: (): CityModel | undefined => undefined,
   createCity: (): CityModel | undefined => undefined,
+  deleteCity: (): CityModel | undefined => undefined,
+  isLoading: false,
+  setIsLoading: (): boolean => false,
 });
 
-export function CitiesProvider({ children }: CitiesProviderProps): JSX.Element {
+export function CitiesProvider({ children, session }: CitiesProviderProps): JSX.Element {
   const [cities, setCities] = useState<CityModel[]>([]);
   const [selectedCity, setSelectedCity] = useState<CityModel>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     async function getCities() {
+      // const session = getServerSession(authOptions);
       try {
-        const data: CityModel[] = await cityService.getCities();
+        setIsLoading(true);
+        const data: CityModel[] = await cityService.getCitiesFromApi(session);
         setCities(data);
       } catch (error) {
         console.error(error);
         ResourceNotFoundToast();
+      } finally {
+        setIsLoading(false);
       }
     }
     getCities();
-  }, []);
+  }, [session]);
 
   async function createCity(city: CityModel) {
     try {
-      const data = cities;
-      data.push(city);
-      await cityService.updateCities(data);
+      setIsLoading(true);
+      const newCity: CityModel = await cityService.addCityToApi(city, session);
+      const prevState = cities;
+      prevState.push(newCity);
+      setCities(prevState);
     } catch (error) {
       console.error(error);
       ResourceNotFoundToast();
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function deleteCity(cityId: string) {
+    try {
+      setIsLoading(true);
+      await cityService.deleteCityFromApi(cityId, session);
+      const newCitiesState = cities.filter((c) => c.id !== cityId);
+      setCities(newCitiesState);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
   return (
     <CitiesContext.Provider
-      value={{ cities, setCities, selectedCity, setSelectedCity, createCity }}
+      value={{
+        cities,
+        setCities,
+        selectedCity,
+        setSelectedCity,
+        createCity,
+        deleteCity,
+        isLoading,
+        setIsLoading,
+      }}
     >
       {children}
     </CitiesContext.Provider>

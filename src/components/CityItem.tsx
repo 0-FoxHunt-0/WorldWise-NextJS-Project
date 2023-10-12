@@ -13,7 +13,7 @@ interface CityItemProps {
 
 function CityItem({ city }: CityItemProps) {
   const { cityName, emoji, date, position, id } = city;
-  const { selectedCity, setSelectedCity } = useCitiesContext();
+  const { selectedCity, setSelectedCity, deleteCity } = useCitiesContext();
 
   const formatDate = (date: string) => {
     if (date) {
@@ -41,7 +41,13 @@ function CityItem({ city }: CityItemProps) {
         </span>
         <h3 className={styles.name}>{cityName}</h3>
         <time className={styles.date}>({formatDate(date)})</time>
-        <button className={styles.deleteBtn}>
+        <button
+          className={styles.deleteBtn}
+          onClick={(e) => {
+            e.preventDefault();
+            deleteCity(id);
+          }}
+        >
           <span>&times;</span>
         </button>
       </Link>

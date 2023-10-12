@@ -2,7 +2,7 @@ import NavBar from "@/components/NavBar";
 import Link from "next/link";
 import styles from "../styles/Homepage.module.css";
 
-export default function Home() {
+async function Home() {
   return (
     <main className={styles.homepage}>
       <NavBar />
@@ -24,3 +24,5 @@ export default function Home() {
     </main>
   );
 }
+
+export default Home;

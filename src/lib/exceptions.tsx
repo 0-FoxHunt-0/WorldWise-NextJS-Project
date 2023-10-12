@@ -47,3 +47,14 @@ export function ResourceNotFoundToast(message: string = "Resource not found.") {
     action: <ToastAction altText="Close">Close</ToastAction>,
   });
 }
+
+export function AccessDeniedToast(
+  message: string = "Access Denied, Please log in."
+) {
+  return toast({
+    variant: "destructive",
+    title: "Access Denied",
+    description: message,
+    action: <ToastAction altText="Close">Close</ToastAction>,
+  });
+}

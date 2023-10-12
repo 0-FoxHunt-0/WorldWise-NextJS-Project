@@ -1,8 +1,9 @@
 class UserModel {
-  name: string;
+  id: string;
+  name?: string;
+  username?: string;
   email: string;
-  password: string;
-  avatar: string;
+  image?: string;
 }
 
 export default UserModel;
