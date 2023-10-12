@@ -23,8 +23,8 @@ async function addCityToApi(city: CityModel, session: any): Promise<CityModel> {
   return newCity;
 }
 
-async function deleteCityFromApi(cityId: string, session: any): Promise<void> {
-  await axios.delete(`${appConfig.baseUrl}/api/cities/${cityId}`);
+async function deleteCityFromApi(cityId: string): Promise<void> {
+  await axios.delete(`${appConfig.baseUrl}/api/cities/${cityId}`, {headers: {'Content-Type': 'application/json'}});
 }
 
 async function getCountriesFromApi(
@@ -57,7 +57,3 @@ const cityService = {
 };
 
 export default cityService;
-
-// const cityService = new CityService();
-
-// export default cityService;

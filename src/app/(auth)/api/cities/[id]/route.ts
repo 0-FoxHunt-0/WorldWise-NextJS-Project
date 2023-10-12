@@ -122,9 +122,9 @@ export async function DELETE(
       }
     }
 
-    // return NextResponse.json(
-    //   { message: "Some error has occurred", error },
-    //   { status: 500 }
-    // );
+    return NextResponse.json(
+      { message: "Some error has occurred", error },
+      { status: 500 }
+    );
   }
 }

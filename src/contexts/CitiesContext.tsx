@@ -80,7 +80,7 @@ export function CitiesProvider({ children, session }: CitiesProviderProps): JSX.
   async function deleteCity(cityId: string) {
     try {
       setIsLoading(true);
-      await cityService.deleteCityFromApi(cityId, session);
+      await cityService.deleteCityFromApi(cityId);
       const newCitiesState = cities.filter((c) => c.id !== cityId);
       setCities(newCitiesState);
     } catch (error) {
