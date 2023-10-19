@@ -2,13 +2,11 @@
   padding: 2.5rem 5rem;
   background-color: var(--color-dark--1);
   min-height: 100vh;
+  max-width: 100vw;
 }
 
 .product section {
-  width: clamp(80rem, 80%, 90rem);
   margin: 6rem auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
   gap: 7rem;
   align-items: center;
 }
@@ -30,4 +28,21 @@
 
 .product section a {
   margin-top: 2rem;
+}
+
+@media only screen and (max-width: 1024px) {
+  .product section {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+@media only screen and (min-width: 1024px) {
+  .product section {
+    width: clamp(80rem, 80%, 90rem);
+  }
+  .product section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
 }

@@ -3,16 +3,22 @@ import { getServerSession } from "next-auth";
 import styles from "../styles/PageNav.module.css";
 import Logo from "./Logo";
 import NavLink from "./NavLink";
-import LoginButton from "./LoginButton";
+import LogoutButton from "./LogoutButton";
+import CollapsibleMenu from "./CollapsibleMenu";
 
 async function NavBar() {
   const session = await getServerSession(authOptions);
   const user = session?.user;
 
   return (
-    <nav className={styles.nav}>
+    <nav
+      className={`${styles.nav} flex flex-row items-center justify-between xl:text-`}
+    >
       <Logo />
-      <ul>
+      <div id="collapseMenu" className="md:hidden">
+        <CollapsibleMenu user={user} />
+      </div>
+      <ul className="sl:hidden md:flex md:justify-center md:gap-16 md:items-center">
         <li>
           <NavLink href={"/pricing"}>Pricing</NavLink>
         </li>
@@ -26,7 +32,7 @@ async function NavBar() {
             </NavLink>
           ) : (
             <NavLink href="/" className={styles.ctaLink}>
-              <LoginButton />
+              <LogoutButton />
             </NavLink>
           )}
         </li>

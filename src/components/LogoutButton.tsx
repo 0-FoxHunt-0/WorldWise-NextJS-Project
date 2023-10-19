@@ -3,14 +3,18 @@
 import { signOut } from "next-auth/react";
 import React from "react";
 
-function LoginButton() {
+function LogoutButton() {
   function handleClick() {
     signOut({
       redirect: true,
       callbackUrl: `${window.location.origin}`,
     });
   }
-  return <button className="uppercase" onClick={handleClick}>Logout</button>;
+  return (
+    <button className="uppercase" onClick={handleClick}>
+      Logout
+    </button>
+  );
 }
 
-export default LoginButton;
+export default LogoutButton;

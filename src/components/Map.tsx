@@ -90,7 +90,7 @@ function Map({ displayName, user }: MapProps) {
   );
 
   return (
-    <div className={styles.mapContainer}>
+    <div className={`${styles.mapContainer} max-lg:!h-1/2`}>
       <MapContainer
         center={[center.lat, center.lng]}
         zoom={13}
@@ -138,6 +138,7 @@ function Map({ displayName, user }: MapProps) {
             });
             router.push("/app/cities");
           }}
+          className="max-lg:!bottom-8"
         >
           {isLoadingPosition ? "Loading..." : "Go To Self"}
         </Button>

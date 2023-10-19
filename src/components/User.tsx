@@ -16,33 +16,12 @@ function User({ displayName, user }: UserProps) {
     });
   }
   return (
-    <div className={styles.user}>
+    <div className={`${styles.user} xl:!text-3xl max-lg:!text-xl max-lg:!top-6 max-lg:!right-6 max-xs:!text-lg max-xs:!top-4 max-xs:!right-4`}>
       {user.image && <img src={user.image} alt={displayName} />}
       <span>Welcome, {displayName}</span>
-      <button onClick={handleClick}>Logout</button>
+      <button className="max-xs:!text-sm xl:!text-2xl" onClick={handleClick}>Logout</button>
     </div>
   );
 }
-
-// const FAKE_USER = {
-//   name: "Jack",
-//   email: "jack@example.com",
-//   password: "qwerty",
-//   avatar: "https://i.pravatar.cc/100?u=zz",
-// };
-
-// function User() {
-//   const user = FAKE_USER;
-
-//   function handleClick() {}
-
-//   return (
-//     <div className={styles.user}>
-//       <img src={user.avatar} alt={user.name} />
-//       <span>Welcome, {user.name}</span>
-//       <button onClick={handleClick}>Logout</button>
-//     </div>
-//   );
-// }
 
 export default User;

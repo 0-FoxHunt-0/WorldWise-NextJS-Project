@@ -10,7 +10,7 @@ interface SidebarProps {
 
 function Sidebar({ children }: SidebarProps) {
   return (
-    <div className={styles.sidebar}>
+    <div className={`${styles.sidebar} max-xl:!basis-2/5 max-lg:!h-1/2 max-lg:!pb-4 max-lg:!pt-8 max-sm:!px-2`}>
       <Logo />
       <AppNavigation />
       {children}

@@ -36,11 +36,11 @@ function CityItem({ city }: CityItemProps) {
         }`}
         onClick={() => setSelectedCity(city)}
       >
-        <span className={styles.emoji}>
+        <span className={`${styles.emoji}`}>
           <img src={cityService.flagEmojiToPNG(emoji)} alt="flag" />
         </span>
-        <h3 className={styles.name}>{cityName}</h3>
-        <time className={styles.date}>({formatDate(date)})</time>
+        <h3 className={`${styles.name} xl:!text-3xl`}>{cityName}</h3>
+        <time className={`${styles.date} xl:!text-3xl`}>({formatDate(date)})</time>
         <button
           className={styles.deleteBtn}
           onClick={(e) => {

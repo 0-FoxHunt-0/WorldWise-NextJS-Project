@@ -20,7 +20,7 @@ async function AppLayout({ children }: AppLayoutProps) {
   const displayName = user?.username || user?.name;
   if (user) {
     return (
-      <div className={styles.app}>
+      <div className={`${styles.app} max-lg:!block`}>
         <CitiesProvider session={session}>
           <Sidebar>{children}</Sidebar>
           <Map user={user} displayName={displayName} />

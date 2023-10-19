@@ -79,15 +79,21 @@ const SignUpForm = () => {
           onSubmit={form.handleSubmit(onSubmit)}
           className="w-full text-light-2"
         >
-          <div className="space-y-2 text-2xl">
+          <div className="space-y-2 text-2xl xl:space-y-4">
             <FormField
               control={form.control}
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-2xl">Username</FormLabel>
+                  <FormLabel className="text-2xl xl:text-4xl">
+                    Username
+                  </FormLabel>
                   <FormControl className="text-xl">
-                    <Input placeholder="johndoe" {...field} />
+                    <Input
+                      placeholder="johndoe"
+                      className="!text-xl xl:!text-2xl"
+                      {...field}
+                    />
                   </FormControl>
                   <FormDescription></FormDescription>
                   <FormMessage />
@@ -99,11 +105,12 @@ const SignUpForm = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-2xl">Email</FormLabel>
+                  <FormLabel className="text-2xl xl:text-4xl">Email</FormLabel>
                   <FormControl>
                     <Input
                       type="email"
                       placeholder="mail@example.com"
+                      className="!text-xl xl:!text-2xl"
                       {...field}
                     />
                   </FormControl>
@@ -117,11 +124,14 @@ const SignUpForm = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-2xl">Password</FormLabel>
+                  <FormLabel className="text-2xl xl:text-4xl">
+                    Password
+                  </FormLabel>
                   <FormControl>
                     <Input
                       type="password"
                       placeholder="Enter your password"
+                      className="!text-xl xl:!text-2xl"
                       {...field}
                     />
                   </FormControl>
@@ -135,13 +145,14 @@ const SignUpForm = () => {
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-2xl">
+                  <FormLabel className="text-2xl xl:text-4xl">
                     Re-Enter your password
                   </FormLabel>
                   <FormControl>
                     <Input
                       type="password"
                       placeholder="Confirm password"
+                      className="!text-xl xl:!text-2xl"
                       {...field}
                     />
                   </FormControl>
@@ -151,15 +162,18 @@ const SignUpForm = () => {
               )}
             />
           </div>
-          <Button className="w-full mt-6 text-xl" type="submit">
+          <Button
+            className="w-full mt-6 text-xl xl:text-3xl xl:!p-6"
+            type="submit"
+          >
             Sign Up
           </Button>
         </form>
-        <div className="flex items-center w-full mx-auto text-light-2 text-xl my-4 justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-stone-400 after:ml-4 after:block after:h-px after:flex-grow after:bg-stone-400">
+        <div className="flex items-center w-full mx-auto text-light-2 text-xl xl:text-2xl my-4 justify-evenly before:mr-4 before:block before:h-px before:flex-grow before:bg-stone-400 after:ml-4 after:block after:h-px after:flex-grow after:bg-stone-400">
           or
         </div>
         <GoogleSignInButton>Sign up with google</GoogleSignInButton>
-        <p className="mt-2 text-center text-light-2 text-base">
+        <p className="text-center text-light-2 text-base xl:text-2xl mt-5">
           If you have an account, please&nbsp;
           <Link className="text-blue-500 hover:underline" href="/sign-in">
             Sign in

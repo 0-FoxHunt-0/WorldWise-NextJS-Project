@@ -3,7 +3,7 @@ import styles from "../../../styles/Product.module.css";
 
 function Pricing() {
   return (
-    <main className={styles.product}>
+    <main className={`${styles.product} max-sm:!px-12`}>
       <NavBar />
       <section>
         <div>
@@ -21,6 +21,7 @@ function Pricing() {
         <img
           src="img-2.jpg"
           alt="person with dog overlooking mountain with sunset"
+          className="hidden lg:!block"
         />
       </section>
     </main>

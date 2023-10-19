@@ -6,10 +6,10 @@ function AppNavigation() {
     <nav className={styles.nav}>
       <ul>
         <li>
-          <NavLink href={"/app/cities"}>Cities</NavLink>
+          <NavLink className="xl:!text-2xl xl:!py-4 xl:px-8" href={"/app/cities"}>Cities</NavLink>
         </li>
         <li>
-          <NavLink href={"/app/countries"}>Countries</NavLink>
+          <NavLink className="xl:!text-2xl xl:!py-4 xl:px-8" href={"/app/countries"}>Countries</NavLink>
         </li>
       </ul>
     </nav>

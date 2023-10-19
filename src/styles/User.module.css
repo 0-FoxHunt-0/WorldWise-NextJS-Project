@@ -32,3 +32,19 @@
   text-transform: uppercase;
   cursor: pointer;
 }
+
+@media not all and (min-width: 1024px) {
+  .user button {
+    font-size: 1.125rem;
+  }
+
+  .user img {
+    height: 3rem;
+  }
+}
+
+@media not all and (min-width: 321px) {
+  .user img {
+    display: none;
+  }
+}

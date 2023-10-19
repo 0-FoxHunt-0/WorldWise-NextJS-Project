@@ -56,3 +56,9 @@
   background-color: var(--color-brand--1);
   color: var(--color-dark--1);
 }
+
+@media (min-width: 1441px) {
+  .emoji img {
+    height: 2.25rem;
+  }
+}

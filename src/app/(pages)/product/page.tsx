@@ -3,12 +3,13 @@ import styles from "../../../styles/Product.module.css";
 
 function Product() {
   return (
-    <main className={styles.product}>
+    <main className={`${styles.product} max-sm:!px-12`}>
       <NavBar />
       <section>
         <img
           src="img-1.jpg"
           alt="person with dog overlooking mountain with sunset"
+          className="hidden lg:!block"
         />
         <div>
           <h2>About WorldWide.</h2>

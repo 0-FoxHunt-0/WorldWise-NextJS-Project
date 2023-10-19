@@ -6,11 +6,15 @@ interface ButtonProps {
   children: ReactNode;
   onClickHandler: () => void;
   type: string;
+  className?: string;
 }
 
-function Button({ children, onClickHandler, type }: ButtonProps) {
+function Button({ children, onClickHandler, type, className }: ButtonProps) {
   return (
-    <ButtonUI className={`${styles.btn} ${styles[type]}`} onClick={onClickHandler}>
+    <ButtonUI
+      className={`${styles.btn} ${styles[type]} ${className}`}
+      onClick={onClickHandler}
+    >
       {children}
     </ButtonUI>
   );

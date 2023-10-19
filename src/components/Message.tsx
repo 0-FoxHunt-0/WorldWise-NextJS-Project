@@ -7,7 +7,7 @@ interface MessageProps {
 
 function Message({ message }: MessageProps) {
   return (
-    <p className={styles.message}>
+    <p className={`${styles.message} xl:!text-4xl`}>
       <span role="img">👋</span> {message}
     </p>
   );
