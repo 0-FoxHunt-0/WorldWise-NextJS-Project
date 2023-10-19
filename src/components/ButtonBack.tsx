@@ -3,7 +3,7 @@
 import Button from "./Button";
 
 interface ButtonBackProps {
-  onClickHandler: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onClickHandler: (e?: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 function ButtonBack({ onClickHandler }: ButtonBackProps) {
