@@ -55,7 +55,6 @@ function CityForm() {
       date: date.toString(),
       notes,
       position: { lat, lng },
-      id: uuidv4(),
     };
     createCity(newCity);
   }
@@ -157,9 +156,12 @@ function CityForm() {
       </div>
 
       <div className={styles.buttons}>
-        <Button type="primary" onClickHandler={() => {
-          router.push('cities')
-        }}>
+        <Button
+          type="primary"
+          onClickHandler={() => {
+            router.push("cities");
+          }}
+        >
           Add
         </Button>
         <ButtonBack onClickHandler={backCallBack} />
