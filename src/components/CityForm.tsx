@@ -1,8 +1,10 @@
 "use client";
 
+import { useCitiesContext } from "@/contexts/CitiesContext";
 import { useUrlPosition } from "@/hooks/useUrlPosition";
 import { ResourceNotFoundToast } from "@/lib/exceptions";
 import { cn } from "@/lib/utils";
+import CityModel from "@/models/CityModel";
 import cityService from "@/services/CityService";
 import axios from "axios";
 import { format } from "date-fns";
@@ -16,9 +18,6 @@ import Spinner from "./Spinner";
 import { Button as ButtonUI } from "./ui/button";
 import { Calendar } from "./ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import CityModel from "@/models/CityModel";
-import { useCitiesContext } from "@/contexts/CitiesContext";
-const { v4: uuidv4 } = require("uuid");
 
 export function convertToEmoji(countryCode: string): string {
   const base = 127397; // Offset code point for regional indicator symbol letters A
@@ -92,8 +91,10 @@ function CityForm() {
 
   if (isLoadingGeocoding) return <Spinner />;
 
-  if (!lat && !lng)
-    return ResourceNotFoundToast("Start by clicking on the map.");
+  if (!lat && !lng) {
+    ResourceNotFoundToast("Start by clicking on the map.");
+    return;
+  }
 
   return (
     <form className={styles.form} onSubmit={handleSubmit}>
