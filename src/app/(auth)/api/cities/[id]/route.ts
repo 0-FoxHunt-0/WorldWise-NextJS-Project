@@ -98,18 +98,13 @@ export async function DELETE(
 ) {
   try {
     const cityToDeleteId = params.id;
-    const deletedCity = await prisma.city.delete({
+    await prisma.city.delete({
       where: {
         id: cityToDeleteId,
       },
     });
 
-    console.log(deletedCity);
-
-    return NextResponse.json(
-      { message: "City has been deleted" },
-      { status: 204 }
-    );
+    return NextResponse.json({ message: "City has been deleted", status: 204 });
   } catch (error) {
     if (error instanceof PrismaClientKnownRequestError) {
       if (error.code === "P2025") {

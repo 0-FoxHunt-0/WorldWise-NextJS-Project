@@ -6,8 +6,8 @@ interface AuthLayoutProps {
 
 const AuthLayout: FC<AuthLayoutProps> = ({ children }) => {
   return (
-    <div className="flex flex-wrap justify-center content-center h-screen">
-      <div className="p-10 rounded-md bg-dark-1 w-2/6 h-fit">{children}</div>
+    <div className="flex flex-wrap justify-center content-center h-screen bg-dark-0">
+      <div className="p-10 rounded-xl bg-dark-2 w-2/6 h-fit">{children}</div>
     </div>
   );
 };

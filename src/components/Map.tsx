@@ -1,10 +1,10 @@
 "use client";
 
-import { useGeolocation } from "@/hooks/useGeolocation";
-import styles from "../styles/Map.module.css";
 import { useCitiesContext } from "@/contexts/CitiesContext";
+import { useGeolocation } from "@/hooks/useGeolocation";
 import { useUrlPosition } from "@/hooks/useUrlPosition";
 import PositionModel from "@/models/PositionModel";
+import L from "leaflet";
 import "leaflet-defaulticon-compatibility";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
 import "leaflet/dist/leaflet.css";
@@ -20,6 +20,7 @@ import {
   useMap,
   useMapEvents,
 } from "react-leaflet";
+import styles from "../styles/Map.module.css";
 import Button from "./Button";
 import User from "./User";
 
@@ -77,6 +78,9 @@ function Map({ displayName, user }: MapProps) {
   // Define the radius threshold (in kilometers) for button visibility
   const radiusThreshold = 0.75; // Adjust this value as needed
 
+  const bounds = L.latLngBounds(L.latLng(-90, -180), L.latLng(90, 180)); // Set global bounds
+  const maxBounds = L.latLngBounds(L.latLng(-85, -175), L.latLng(85, 175)); // Set max bounds
+
   // Calculate the distance between the current center and the user's position
   const distanceToUser = calculateDistance(
     center.lat,
@@ -92,6 +96,8 @@ function Map({ displayName, user }: MapProps) {
         zoom={13}
         scrollWheelZoom={true}
         className={styles.map}
+        bounds={bounds}
+        maxBounds={maxBounds}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

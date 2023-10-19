@@ -1,13 +1,16 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
+import { AccessDeniedToast } from "@/lib/exceptions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import GoogleSignInButton from "../GoogleSignInButton";
+import Logo from "../Logo";
 import { Button } from "../ui/button";
 import {
   Form,
@@ -19,9 +22,6 @@ import {
   FormMessage,
 } from "../ui/form";
 import { useToast } from "../ui/use-toast";
-import { AccessDeniedToast, ResourceNotFoundToast } from "@/lib/exceptions";
-import { useEffect } from "react";
-import Logo from "../Logo";
 
 const FormSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email"),
@@ -42,7 +42,6 @@ const SignInForm = () => {
     if (params.get("access-denied") === "true") {
       AccessDeniedToast();
     }
-    ResourceNotFoundToast();
   }, [params]);
 
   const onSubmit = async (values: z.infer<typeof FormSchema>) => {
