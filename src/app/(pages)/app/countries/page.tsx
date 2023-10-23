@@ -1,11 +1,9 @@
-import axios from "axios";
-
 import CountryList from "@/components/CountryList";
-import CityModel from "@/models/CityModel";
+import { authOptions } from "@/lib/auth";
 import CountryModel from "@/models/CountryModel";
 import cityService from "@/services/CityService";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import { headers } from "next/headers";
 
 async function CountryPage() {
   // const { data } = await axios.get(
@@ -32,7 +30,17 @@ async function CountryPage() {
   // });
 
   const session = await getServerSession(authOptions);
-  const countries: CountryModel[] = await cityService.getCountriesFromApi(session?.user.id, session);
+  const headersList = headers();
+  let host = headersList.get("host");
+  if (!host.includes("http://") || !host.includes("https://")) {
+    host = "http://" + host;
+  }
+
+  const countries: CountryModel[] = await cityService.getCountriesFromApi(
+    session?.user.id,
+    session,
+    host
+  );
 
   return <CountryList countries={countries} />;
 }
