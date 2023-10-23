@@ -1,21 +1,23 @@
-// "use server";
-
-import appConfig from "@/lib/appConfig";
 import CityModel from "@/models/CityModel";
 import CountryModel from "@/models/CountryModel";
 import axios from "axios";
 
-async function getCitiesFromApi(session: any): Promise<CityModel[]> {
-  const { data } = await axios.get(
-    `${appConfig.baseUrl}/api/cities/${session.user.id}`
-  );
+async function getCitiesFromApi(
+  session: any,
+  hostUrl: string
+): Promise<CityModel[]> {
+  const { data } = await axios.get(`${hostUrl}/api/cities/${session.user.id}`);
   const cities: CityModel[] = data.cities;
   return cities;
 }
 
-async function addCityToApi(city: CityModel, session: any): Promise<CityModel> {
+async function addCityToApi(
+  city: CityModel,
+  session: any,
+  hostUrl: string
+): Promise<CityModel> {
   const { data } = await axios.post(
-    `${appConfig.baseUrl}/api/cities/${session?.user.id}`,
+    `${hostUrl}/api/cities/${session?.user.id}`,
     city
   );
 
@@ -23,17 +25,21 @@ async function addCityToApi(city: CityModel, session: any): Promise<CityModel> {
   return newCity;
 }
 
-async function deleteCityFromApi(cityId: string): Promise<void> {
-  await axios.delete(`${appConfig.baseUrl}/api/cities/${cityId}`, {headers: {'Content-Type': 'application/json'}});
+async function deleteCityFromApi(
+  cityId: string,
+  hostUrl: string
+): Promise<void> {
+  await axios.delete(`${hostUrl}/api/cities/${cityId}`, {
+    headers: { "Content-Type": "application/json" },
+  });
 }
 
 async function getCountriesFromApi(
   userId: string,
-  session: any
+  session: any,
+  hostUrl: string
 ): Promise<CountryModel[]> {
-  const { data } = await axios.get(
-    `${appConfig.baseUrl}/api/countries/${userId}`
-  );
+  const { data } = await axios.get(`${hostUrl}/api/countries/${userId}`);
 
   return data.countries;
 }

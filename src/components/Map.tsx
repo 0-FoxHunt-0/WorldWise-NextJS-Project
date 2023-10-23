@@ -138,7 +138,7 @@ function Map({ displayName, user }: MapProps) {
             });
             router.push("/app/cities");
           }}
-          className="max-lg:!bottom-8"
+          className="max-lg:!bottom-8 max-sm:!bottom-16"
         >
           {isLoadingPosition ? "Loading..." : "Go To Self"}
         </Button>

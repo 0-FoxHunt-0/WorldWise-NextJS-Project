@@ -16,6 +16,7 @@ import {
 interface CitiesProviderProps {
   children: ReactNode;
   session: any;
+  hostUrl: string;
 }
 
 interface ContextProps {
@@ -40,17 +41,23 @@ const CitiesContext = createContext<ContextProps>({
   setIsLoading: (): boolean => false,
 });
 
-export function CitiesProvider({ children, session }: CitiesProviderProps): JSX.Element {
+export function CitiesProvider({
+  children,
+  session,
+  hostUrl,
+}: CitiesProviderProps): JSX.Element {
   const [cities, setCities] = useState<CityModel[]>([]);
   const [selectedCity, setSelectedCity] = useState<CityModel>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     async function getCities() {
-      // const session = getServerSession(authOptions);
       try {
         setIsLoading(true);
-        const data: CityModel[] = await cityService.getCitiesFromApi(session);
+        const data: CityModel[] = await cityService.getCitiesFromApi(
+          session,
+          hostUrl
+        );
         setCities(data);
       } catch (error) {
         console.error(error);
@@ -60,12 +67,16 @@ export function CitiesProvider({ children, session }: CitiesProviderProps): JSX.
       }
     }
     getCities();
-  }, [session]);
+  }, [hostUrl, session]);
 
   async function createCity(city: CityModel) {
     try {
       setIsLoading(true);
-      const newCity: CityModel = await cityService.addCityToApi(city, session);
+      const newCity: CityModel = await cityService.addCityToApi(
+        city,
+        session,
+        hostUrl
+      );
       const prevState = cities;
       prevState.push(newCity);
       setCities(prevState);
@@ -80,7 +91,7 @@ export function CitiesProvider({ children, session }: CitiesProviderProps): JSX.
   async function deleteCity(cityId: string) {
     try {
       setIsLoading(true);
-      await cityService.deleteCityFromApi(cityId);
+      await cityService.deleteCityFromApi(cityId, hostUrl);
       const newCitiesState = cities.filter((c) => c.id !== cityId);
       setCities(newCitiesState);
     } catch (error) {
