@@ -1,8 +1,12 @@
 import NavBar from "@/components/NavBar";
 import Link from "next/link";
 import styles from "../styles/Homepage.module.css";
+import { authOptions } from "@/lib/auth";
+import { getServerSession } from "next-auth";
 
 async function Home() {
+  const session = await getServerSession(authOptions);
+
   return (
     <main className={`${styles.homepage} sl:!overflow-auto max-sm:!px-12`}>
       <NavBar />
@@ -17,12 +21,21 @@ async function Home() {
           of. Never forget your wonderful experiences, and show your friends how
           you have wandered the world.
         </h2>
-        <Link
-          href={"/app/cities"}
-          className="cta xl:!text-3xl xl:!px-12 xl:!py-6 sl:!text-xl sl:!px-7 sl:!py-4"
-        >
-          Start tracking now
-        </Link>
+        {session !== null ? (
+          <Link
+            href={"/app/cities"}
+            className="cta xl:!text-3xl xl:!px-12 xl:!py-6 sl:!text-xl sl:!px-7 sl:!py-4"
+          >
+            Start tracking now
+          </Link>
+        ) : (
+          <Link
+            href={"/sign-in"}
+            className="cta xl:!text-3xl xl:!px-12 xl:!py-6 sl:!text-xl sl:!px-7 sl:!py-4"
+          >
+            Get started
+          </Link>
+        )}
       </section>
     </main>
   );
