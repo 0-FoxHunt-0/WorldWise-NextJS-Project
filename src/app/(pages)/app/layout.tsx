@@ -20,7 +20,8 @@ async function AppLayout({ children }: AppLayoutProps) {
   const headersList = headers();
   let host = headersList.get("host");
   if (!host.includes("http://") || !host.includes("https://")) {
-    host = "http://" + host;
+    if (host.includes("localhost")) host = "http://" + host;
+    else host = "https://" + host;
   }
 
   const displayName = user?.username || user?.name;
