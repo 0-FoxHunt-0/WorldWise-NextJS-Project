@@ -11,7 +11,7 @@ function LogoutButton() {
     });
   }
   return (
-    <button className="uppercase" onClick={handleClick}>
+    <button onClick={handleClick}>
       Logout
     </button>
   );
