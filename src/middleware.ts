@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 const allowedOrigins = [
   "http://localhost:3000",
   "worldwise-git-master-nates-projects-4a12ab74.vercel.app",
-  "worldwise-6omy3kg73-nates-projects-4a12ab74.vercel.app",
+  "worldwise-g527xx79h-nates-projects-4a12ab74.vercel.app",
   "worldwise-lemon.vercel.app",
 ];
 
